@@ -10,37 +10,39 @@ import java.lang.Number;
  * CSCU9T4 Java strings and files exercise.
  *
  */
-public class FilesInOut {
+public class FormatNamesM {
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws FileNotFoundException
     {
         
         // Construct Scanner and PrinterWriter objects for reading and writing
         
     	
-    	//File inputFile = new File("input.txt");
-    	//File outputFile = new File ("formatted.txt");
+    	//File inputFile = new File("inputm.txt");
+    	//File outputFile = new File ("formattedm.txt");
+    	//Scanner console = new Scanner(System.in);
+    	//String inputFileName = console.next();
+    	//String outputFileName = console.next();
     	
-    	Scanner in = null;
-    	PrintWriter out = null;
-    	try {
-    		String inputFileName = args[0];
-    		File inputFile = new File(inputFileName);
-    		in = new Scanner(inputFile);
-    	} catch (IOException e) {
-    		System.err.println("IOException: " + e.getMessage () + " not found.");
+    	boolean uFlag = false;
+		String inputFileName = "";
+		String outputFileName = "";
+    	if (args.length == 3) {
+    		if (args[0].equals("-u")) {
+    			uFlag = true;
+    		}
+    		inputFileName = args[1];
+    		outputFileName = args[2];
+    	} else if (args.length == 2) { 
+    		inputFileName = args[0];
+    		outputFileName = args[1];
     	}
     	
-    	try {
-        	String outputFileName = args[1];
-        	File outputFile = new File (outputFileName);
-            out = new PrintWriter(outputFile);
-    	} catch (FileNotFoundException e) {
-    		System.err.println("FileNotFoundException: " + e.getMessage() + 
-    				" not openable.");
-    		System.exit(0);
-    	}
-        
+    	File inputFile = new File(inputFileName);
+    	File outputFile = new File(outputFileName);
+    	
+        Scanner in = new Scanner (inputFile);
+        PrintWriter out = new PrintWriter(outputFile);
         
         // Read the input and write the output
         
@@ -55,14 +57,19 @@ public class FilesInOut {
         	String personName = input.substring(0,i);
         	String birthDate = input.substring(i);
         	personName = personName.trim();
-        	personName = Formatter.titleCaseConverter(personName);
+        	if (uFlag) {
+        		personName = Formatter.titleCaseConverterMU(personName);
+        	} else {
+        		personName = Formatter.titleCaseConverterM(personName);
+        	}
         	birthDate = birthDate.trim();
             birthDate = Formatter.dateConverter(birthDate);
             
-            out.printf("%-19s %10s\n", personName, birthDate);
+            out.printf("%-22s %10s\n", personName, birthDate);
         }
         in.close();
         out.close();
+        
         
     	// Replace this with statements to set the file name (input) and file name (output).
         // Initially it will be easier to hardcode suitable file names.
