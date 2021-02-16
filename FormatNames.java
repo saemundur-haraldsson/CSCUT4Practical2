@@ -5,17 +5,18 @@ import java.util.*;
 import javax.swing.*;
 import java.lang.Number;
 
-public class FormatNamesM {
+public class FormatNames {
 
-    public static void main(String[] args) throws FileNotFoundException
+    public static void main(String[] args)
     {
-    	// Variable Declaration
+        
+        // Variable declaration.
     	boolean uFlag = false;
 		String inputFileName = "";
 		String outputFileName = "";
     	Scanner in = null;
     	PrintWriter out = null;
-		
+    	
     	// Check the number of arguments being passed through the command line.
 		switch(args.length) {
 			case 3:
@@ -33,8 +34,8 @@ public class FormatNamesM {
 	    		outputFileName = args[1];
 	    		break;
 		}
-		
-		// Validate that the input file exists.
+    	
+		// Validate the input file.
 		try {
 			//  Construct Scanner object for reading.
 			File inputFile = new File(inputFileName);
@@ -43,7 +44,7 @@ public class FormatNamesM {
 			System.err.println("IOException: " + e.getMessage () + " not found.");
 		}
 		
-		// Validate that the output file exists.
+		// Validate the output file.
 		try {
 			// Construct the PrintWriter object for writing.
 	    	File outputFile = new File(outputFileName);
@@ -54,21 +55,21 @@ public class FormatNamesM {
     		System.exit(0);
 		}
         
-		// Read the input and write the output line by line.
+        // Read the input and write the output line by line.
         while (in.hasNextLine())
         {
         	// Read the unformatted line.
-        	String line = in.nextLine();
+        	String input = in.nextLine();
         	
-        	// Find the index of the first digit.
+        	// Find the index of the first digit
         	int fdIndex = 0;
-        	while (!Character.isDigit(line.charAt(fdIndex))) {
+        	while (!Character.isDigit(input.charAt(fdIndex))) {
         		fdIndex++;
         	}
         	
         	// Split the line into name and birth date.
-        	String personName = line.substring(0,fdIndex);
-        	String birthDate = line.substring(fdIndex);
+        	String personName = input.substring(0,fdIndex);
+        	String birthDate = input.substring(fdIndex);
         	
         	// Trim all the whitespace at the end of the name.
         	personName = personName.trim();
@@ -85,9 +86,10 @@ public class FormatNamesM {
             birthDate = Formatter.dateConverter(birthDate);
             
             // Output the formatted line.
-            out.printf("%-22s %10s\n", personName, birthDate);
+            out.printf("%-19s %10s\n", personName, birthDate);
         }
         in.close();
         out.close();
     }
+
 }
