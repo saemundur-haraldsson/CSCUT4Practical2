@@ -14,15 +14,59 @@ public class FilesInOut {
 
     public static void main(String[] args) throws FileNotFoundException {
 
-        // checks if the args array contains the -u flag
-        boolean hasUFlag = Arrays.stream(args).anyMatch("-u"::equals);
+        boolean validInput = false;
+        boolean validOutput = false;
+        boolean upperCase = false;
+        String inputFileName;
+        String outputFileName;
 
-        if (hasUFlag) {
-            upperCase(args[1], args[2]);
-        } else {
-            titleCase(args[0], args[1]);
+        Scanner in = new Scanner(System.in);
+
+        // attempts to read an input file
+        do {
+            System.out.println("supply filename for input:");
+            try {
+                inputFileName = in.nextLine();
+                File inputFile = new File(inputFileName);
+                Scanner inFile = new Scanner(inputFile);
+                validInput = true;
+                inFile.close();
+                break;
+            } catch (IOException e) {
+                System.err.println("IOException: " + e.getMessage() + "not found");
+            }
+        } while (true);
+
+        // attempts to read an output file
+        do {
+            System.out.println("supply filename for output:");
+            try {
+                outputFileName = in.nextLine();
+                File outputFile = new File(outputFileName);
+                PrintWriter printWriter = new PrintWriter(outputFileName);
+                validOutput = true;
+                printWriter.close();
+                break;
+            } catch (IOException e) {
+                System.err.println("IOException: " + e.getMessage() + "not openable");
+                System.exit(0);
+            }
+        } while (true);
+
+        // checks if the user wants their output in uppercase
+        System.out.println("Uppercase? (yes/no): ");
+        String upperCaseResult = in.nextLine().toLowerCase();
+
+        if (upperCaseResult.equals("yes")) {
+            upperCase = true;
         }
-        
+
+        if (upperCase) {
+            upperCase(inputFileName, outputFileName);
+        } else {
+            titleCase(inputFileName, outputFileName);
+        }
+
     } // main
 
     /**
@@ -56,7 +100,9 @@ public class FilesInOut {
                 printWriter.print(lineInput + " ");
             }
             printWriter.println();
+            in2.close();
         }
+        in.close();
         printWriter.close();
     }
 
@@ -92,7 +138,9 @@ public class FilesInOut {
                 printWriter.print(lineInput + " ");
             }
             printWriter.println();
+            in2.close();
         }
+        in.close();
         printWriter.close();
     }
 
