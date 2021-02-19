@@ -112,28 +112,24 @@ public class FilesInOut {
         } catch (IOException e){
             System.err.println("IOException: " + e.getMessage());
         }
-        // Set up a new PrintWriter to write the output file.
-        // Add suitable code into the above processing (because you need to do this line by line also.
-        // That is, read a line, write a line, loop.
-//        try {
-//            File inputFile = new File("inputm.txt");
-//            if (inputFile.exists() == false || inputFile.isDirectory() == true) {
-//                System.out.println("Please provide a valid input file name.");
-//                return;
-//            }
-//            Scanner sc = new Scanner(inputFile);
-//            File outputFile = new File("formattedM2.txt");
-//            if (outputFile.exists() == true && outputFile.isDirectory() == true) {
-//                System.out.println("Please provide a valid output file name: A directory with same name exist");
-//                return;
-//            }
-//            PrintWriter printWriter = new PrintWriter(outputFile);
-//        }catch (IOException e){
-//
-//        }
-            // Finally, add code to read the filenames as arguments from the command line.
 
+        // Not sure if this section works...
+        try {
+            File inputFile = new File("inputm.txt");
+            if (inputFile.exists() == false || inputFile.isDirectory() == true) {
+                System.out.println("Please provide a valid input file name.");
+                return;
+            }
+            Scanner sc = new Scanner(inputFile);
+            File outputFile = new File("formattedM2.txt");
+            if (outputFile.exists() == true && outputFile.isDirectory() == true) {
+                System.out.println("Please provide a valid output file name: A directory with same name exist");
+                return;
+            }
+            PrintWriter printWriter = new PrintWriter(outputFile);
+        }catch (IOException e){
 
+        }
     } // main
 
 } // FilesInOut
