@@ -28,7 +28,7 @@ public class FilesInOut {
         }
         //creates an output file and checks to see if it already exists
         try {
-            File outputFile = new File("formattedM2.txt");
+            File outputFile = new File("formattedm.txt");
             if (outputFile.createNewFile()) {
                 System.out.println("File " + outputFile.getName() + " created in: " + outputFile.getAbsolutePath());
             } else
@@ -114,22 +114,22 @@ public class FilesInOut {
         }
 
         // Not sure if this section works...
-        try {
-            File inputFile = new File("inputm.txt");
-            if (inputFile.exists() == false || inputFile.isDirectory() == true) {
-                System.out.println("Please provide a valid input file name.");
-                return;
-            }
-            Scanner sc = new Scanner(inputFile);
-            File outputFile = new File("formattedM2.txt");
-            if (outputFile.exists() == true && outputFile.isDirectory() == true) {
-                System.out.println("Please provide a valid output file name: A directory with same name exist");
-                return;
-            }
-            PrintWriter printWriter = new PrintWriter(outputFile);
-        }catch (IOException e){
-
-        }
+//        try {
+//            File inputFile = new File("inputm.txt");
+//            if (inputFile.exists() == false || inputFile.isDirectory() == true) {
+//                System.out.println("Please provide a valid input file name.");
+//                return;
+//            }
+//            Scanner sc = new Scanner(inputFile);
+//            File outputFile = new File("formatted.txt");
+//            if (outputFile.exists() == true && outputFile.isDirectory() == true) {
+//                System.out.println("Please provide a valid output file name: A directory with same name exist");
+//                return;
+//            }
+//            PrintWriter printWriter = new PrintWriter(outputFile);
+//        }catch (IOException e){
+//
+//        }
     } // main
 
 } // FilesInOut
