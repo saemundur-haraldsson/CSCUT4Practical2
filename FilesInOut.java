@@ -28,7 +28,7 @@ public class FilesInOut {
         }
         //creates an output file and checks to see if it already exists
         try {
-            File outputFile = new File("formattedTCm4.txt");
+            File outputFile = new File("formattedM2.txt");
             if (outputFile.createNewFile()) {
                 System.out.println("File " + outputFile.getName() + " created in: " + outputFile.getAbsolutePath());
             } else
@@ -37,25 +37,23 @@ public class FilesInOut {
             System.out.println("An error occurred");
             e.printStackTrace();
         }
-        // Initially, echo the text to System.out to check you are reading correctly.
-        // Then add code to modify the text to the output format.
-
+        //sets flags for arguments
         String inFileName = "";
         String upperCaseFormat = "";
         String titleCaseFormat = "";
         String outFileName = "";
 
-        if (args[0].equals("-u")) {
+        if (args[0].equals("-u")) { //if argument 0 is flag -u:
             upperCaseFormat = args[0];
             inFileName = args[1];
             outFileName = args[2];
         }
-        else if (args[0].equals("-t")){
+        else if (args[0].equals("-t")){ //af argument 0 is flag -t:
             titleCaseFormat = args[0];
             inFileName = args[1];
             outFileName = args[2];
         }
-        else{
+        else{ //otherwise:
             inFileName = args[0];
             outFileName = args[1];
         }
@@ -77,17 +75,18 @@ public class FilesInOut {
                 if (titleCaseFormat.equals("-t")){ //if the flag is '-t' then changes the name to TITLE CASE
                     String[] names = inFile.nextLine().split("\\s"); //splits the text at blank space
                     int numOfNames = names.length; //length of the array containing the names
-                    if (numOfNames == 3) { //if there are 3 names in the array:
-                        String fname = names[0];
-                        String mname = names[1];
-                        String sname = names[2];
+                    if (numOfNames > 3) { //if there are 3 names in the array + the date:
+                        String fname = names[0]; //initialises a variable and sets its value to the first word in the array of names
+                        String mname = names[1]; //initialises a variable and sets its value to the first word in the array of names
+                        String sname = names[2]; //initialises a variable and sets its value to the third word in the array of names
+                        String date = names[3];
                         fname = fname.substring(0, 1).toUpperCase() + fname.substring(1); //capitalises only the first character in the string
                         mname = mname.toUpperCase() + ".";
                         sname = sname.substring(0, 1).toUpperCase() + sname.substring(1); //capitalises only the first character in the string
                         name = fname + " " + mname + " " + sname + " "; //concatenates the 3 names together
-                    } else {
-                        String fname = names[0];
-                        String sname = names[1];
+                    } else { //no middle name (2 names +date):
+                        String fname = names[0]; //initialises a variable and sets its value to the first word in the array of names
+                        String sname = names[1]; //initialises a variable and sets its value to the first word in the array
                         fname = fname.substring(0, 1).toUpperCase() + fname.substring(1); //capitalises only the first character in the string
                         sname = sname.substring(0, 1).toUpperCase() + sname.substring(1);//capitalises only the first character in the string
                         name = fname + " " + sname + " "; //concatenates the 2 names together
@@ -100,6 +99,9 @@ public class FilesInOut {
             System.err.println("IOException: " + e.getMessage() + "not found");
         }
     }
+    /**
+     * method to append the formatted data to the output file
+     */
     public static void appendData(String name, String outFileName, SimpleDateFormat newFormat, Date d){
         try {
             FileWriter fw = new FileWriter(outFileName, true); //true will append new data
@@ -114,20 +116,21 @@ public class FilesInOut {
         // Add suitable code into the above processing (because you need to do this line by line also.
         // That is, read a line, write a line, loop.
 //        try {
-//            File inputFile = new File(inputFileName);
-//            if(inputFile.exists() ==false || inputFile.isDirectory() == true) {
+//            File inputFile = new File("inputm.txt");
+//            if (inputFile.exists() == false || inputFile.isDirectory() == true) {
 //                System.out.println("Please provide a valid input file name.");
 //                return;
 //            }
 //            Scanner sc = new Scanner(inputFile);
-//            File outputFile = new File (outputFileName);
-//            if(outputFile.exists() ==true && outputFile.isDirectory() == true) {
+//            File outputFile = new File("formattedM2.txt");
+//            if (outputFile.exists() == true && outputFile.isDirectory() == true) {
 //                System.out.println("Please provide a valid output file name: A directory with same name exist");
 //                return;
 //            }
-//            PrintWriter printWriter = new PrintWriter (outputFile);
-
-
+//            PrintWriter printWriter = new PrintWriter(outputFile);
+//        }catch (IOException e){
+//
+//        }
             // Finally, add code to read the filenames as arguments from the command line.
 
 
