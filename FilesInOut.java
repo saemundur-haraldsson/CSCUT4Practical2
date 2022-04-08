@@ -36,11 +36,10 @@ public class FilesInOut {
         //While there are more lines, format the lines and add the formatted lines to the output
         while(in.hasNext())
         {
-            out.println(in.nextLine());
-            System.out.println(in.nextLine());
+            out.println( formatInput("-t", in.nextLine()) );
+            //in.nextLine();
         }
         //Used to get last line
-        out.println(in.nextLine());
         //Closing the scanner and the printwriter
         in.close();
         out.close();
@@ -56,4 +55,91 @@ public class FilesInOut {
 
     } // main
 
+    static String formatInput(String flag, String input)
+    {
+        String formattedInput = input;
+        switch(flag)
+        {
+            case "-u":
+                formattedInput = toUpperCase(input);
+                break;
+            case "-t":
+                formattedInput = toTitleCase(input);
+                break;
+            default:
+                break;
+        }
+        formattedInput = formatDate(formattedInput);
+        return formattedInput;
+    }
+
+    static String formatInput(String input)
+    {
+        String formattedInput = input;
+        formattedInput = formatDate(formattedInput);
+        return formattedInput;
+    }
+
+    static String formatDate(String input)
+    {
+        char[] charArray = input.toCharArray();
+        char[] dateArray = new char[10];
+        String output;
+        boolean dateScanStarted = false;
+        int dateIterator = 0;
+        int end = 0;
+        for (int i = 0; i < charArray.length; i++)
+        {
+            if(dateScanStarted)
+            {
+                if(dateIterator == 2 || dateIterator == 5)
+                {
+                    dateArray[dateIterator] = '/';
+                    i--;
+                }
+                else
+                {
+                    dateArray[dateIterator] = charArray[i];
+                }
+                dateIterator++;
+            }
+            else if (Character.isDigit(charArray[i]))
+            {
+                dateScanStarted = true;
+                end = i;
+                dateArray[dateIterator] = charArray[i];
+                dateIterator++;
+            }
+        }
+        output = input.substring(0, end) + String.valueOf(dateArray);
+        return output;
+    }
+
+    static String toTitleCase(String input){
+        char[] charArray = input.toCharArray();
+        String output;
+        boolean shouldCapitalize = true;
+        for (int i = 0; i < charArray.length; i++)
+        {
+            if(shouldCapitalize && !Character.isDigit(charArray[i]))
+            {
+                charArray[i] = Character.toUpperCase(charArray[i]);
+                shouldCapitalize = false;
+            }
+            Character curr = charArray[i];
+            if (curr.equals(' '))
+            {
+                shouldCapitalize = true;
+            }
+        }
+        output = String.valueOf(charArray);
+        return output;
+    }
+
+    static String toUpperCase(String input){
+        return input.toUpperCase();
+    }
+
 } // FilesInOut
+
+
