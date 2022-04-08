@@ -12,7 +12,6 @@ import java.util.Scanner;
  *
  */
 public class FilesInOut {
-//remove this...ss
     public static void main(String[] args) {
     	String currentLine = ""; // variable for storing the line currently read by scanner
     	String name = ""; // variable for storing the name in the current line
