@@ -3,71 +3,83 @@ import java.util.*;
 
 public class FilesInOut {
 
-    public static void main(String[] args) {
-        String inputFileName, outputFileName;
-        Scanner scanner = new Scanner(System.in);
-        BufferedReader reader = null;
-        BufferedWriter writer = null;
-        
-        // Ask the user for the input file name and keep asking until a valid file is given
-        while (true) {
-            System.out.print("Enter the input file name: ");
-            inputFileName = scanner.nextLine();
-            try {
-                reader = new BufferedReader(new FileReader(inputFileName));
-                break;
-            } catch (FileNotFoundException e) {
-                System.out.println("File not found. Try again.");
+    public static void main(String[] args) throws IOException {
+
+        // define input and output file paths
+        String inputFile = args[args.length - 2];
+        String outputFile = args[args.length - 1];
+
+        // define flags
+        boolean uFlag = false; // for upper case output
+        boolean hFlag = false; // for HTML output
+
+        // check for uFlag and hFlag in args array
+        for (int i = 0; i < args.length - 2; i++) {
+            if (args[i].equals("-u")) {
+                uFlag = true;
+            } else if (args[i].equals("-h")) {
+                hFlag = true;
             }
         }
 
-        // Ask the user for the output file name and keep asking until a valid file is given
-        while (true) {
-            System.out.print("Enter the output file name: ");
-            outputFileName = scanner.nextLine();
-            try {
-                writer = new BufferedWriter(new FileWriter(outputFileName));
-                break;
-            } catch (IOException e) {
-                System.out.println("Could not open file. Try again.");
+        // create input and output file objects
+        File input = new File(inputFile);
+        File output = new File(outputFile);
+
+        // create scanner to read input file
+        Scanner scanner = new Scanner(input);
+
+        // create writer to write output file
+        FileWriter writer = new FileWriter(output);
+
+        // create HTML header if hFlag is true
+        if (hFlag) {
+            writer.write("<html>\n<head>\n<title>Formatted Names</title>\n</head>\n<body>\n");
+        }
+
+        // read each line of input file and write formatted name to output file
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            String[] nameParts = line.split(" ");
+
+            // get first and last name
+            String firstName = nameParts[0];
+            String lastName = nameParts[nameParts.length - 1];
+
+            // get middle initial, if it exists
+            String middleInitial = "";
+            if (nameParts.length > 2) {
+                middleInitial = nameParts[1].substring(0, 1).toUpperCase() + ". ";
+            }
+
+            // format date of birth as dd/mm/yyyy
+            String dob = nameParts[nameParts.length - 2];
+            dob = dob.substring(0, 2) + "/" + dob.substring(2, 4) + "/" + dob.substring(4);
+
+            // format name with or without middle initial, depending on middleInitial value
+            String formattedName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1) + " ";
+            if (!middleInitial.equals("")) {
+                formattedName += middleInitial;
+            }
+            formattedName += lastName.substring(0, 1).toUpperCase() + lastName.substring(1);
+
+            // write formatted name to output file
+            if (uFlag) {
+                writer.write(formattedName.toUpperCase() + " " + dob + "\n");
+            } else if (hFlag) {
+                writer.write("<p>" + formattedName + " " + dob + "</p>\n");
+            } else {
+                writer.write(formattedName + " " + dob + "\n");
             }
         }
 
-        // Set up a new Scanner to read the input file.
-        // Processing line by line would be sensible here.
-        // Initially, echo the text to System.out to check you are reading correctly.
-        // Then add code to modify the text to the output format.
-        String line;
-        try {
-            while ((line = reader.readLine()) != null) {
-                String[] tokens = line.split(" ");
-                StringBuilder nameBuilder = new StringBuilder();
-                for (int i = 0; i < tokens.length - 1; i++) {
-                    String token = tokens[i];
-                    nameBuilder.append(token.substring(0, 1).toUpperCase());
-                    nameBuilder.append(token.substring(1));
-                    if (i < tokens.length - 2) {
-                        nameBuilder.append(" ");
-                    }
-                }
-                String name = nameBuilder.toString();
-                String dob = tokens[tokens.length - 1];
-                String formattedDob = dob.substring(0, 2) + "/" + dob.substring(2, 4) + "/" + dob.substring(4);
-                if (args.length > 0 && args[0].equals("-u")) {
-                    name = name.toUpperCase();
-                }
-                writer.write(name + " " + formattedDob + "\n");
-            }
-        } catch (IOException e) {
-            System.out.println("Error reading or writing file.");
-        } finally {
-            try {
-                reader.close();
-                writer.close();
-            } catch (IOException e) {
-                System.out.println("Error closing file.");
-            }
+        // create HTML footer if hFlag is true
+        if (hFlag) {
+            writer.write("</body>\n</html>");
         }
+
+        // close scanner and writer
         scanner.close();
+        writer.close();
     }
 }
