@@ -2,84 +2,78 @@ import java.io.*;
 import java.util.*;
 
 public class FilesInOut {
-
     public static void main(String[] args) throws IOException {
 
-        // define input and output file paths
-        String inputFile = args[args.length - 2];
-        String outputFile = args[args.length - 1];
+        String inputFileName = "";
+        String outputFileName = "";
+        boolean toUpperCase = false;
+        boolean toHtml = false;
 
-        // define flags
-        boolean uFlag = false; // for upper case output
-        boolean hFlag = false; // for HTML output
+        // check if there are enough arguments
+        if (args.length < 2) {
+            System.out.println("Usage: java FilesInOut [-u] [-h] input_file output_file");
+            System.exit(1);
+        }
 
-        // check for uFlag and hFlag in args array
-        for (int i = 0; i < args.length - 2; i++) {
-            if (args[i].equals("-u")) {
-                uFlag = true;
-            } else if (args[i].equals("-h")) {
-                hFlag = true;
+        // parse the command-line arguments
+        int argIndex = 0;
+        while (argIndex < args.length && args[argIndex].startsWith("-")) {
+            String arg = args[argIndex++];
+
+            switch (arg) {
+                case "-u":
+                    toUpperCase = true;
+                    break;
+
+                case "-h":
+                    toHtml = true;
+                    break;
+
+                default:
+                    System.out.println("Invalid option: " + arg);
+                    System.out.println("Usage: java FilesInOut [-u] [-h] input_file output_file");
+                    System.exit(1);
             }
         }
 
-        // create input and output file objects
-        File input = new File(inputFile);
-        File output = new File(outputFile);
-
-        // create scanner to read input file
-        Scanner scanner = new Scanner(input);
-
-        // create writer to write output file
-        FileWriter writer = new FileWriter(output);
-
-        // create HTML header if hFlag is true
-        if (hFlag) {
-            writer.write("<html>\n<head>\n<title>Formatted Names</title>\n</head>\n<body>\n");
+        // check if there are enough arguments
+        if (argIndex + 1 >= args.length) {
+            System.out.println("Usage: java FilesInOut [-u] [-h] input_file output_file");
+            System.exit(1);
         }
 
-        // read each line of input file and write formatted name to output file
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            String[] nameParts = line.split(" ");
+        inputFileName = args[argIndex++];
+        outputFileName = args[argIndex];
 
-            // get first and last name
-            String firstName = nameParts[0];
-            String lastName = nameParts[nameParts.length - 1];
+        // open the input file
+        BufferedReader reader = new BufferedReader(new FileReader(inputFileName));
 
-            // get middle initial, if it exists
-            String middleInitial = "";
-            if (nameParts.length > 2) {
-                middleInitial = nameParts[1].substring(0, 1).toUpperCase() + ". ";
+        // open the output file
+        BufferedWriter writer = new BufferedWriter(new FileWriter(outputFileName));
+
+        String line;
+
+        // read each line from the input file and write it to the output file
+        while ((line = reader.readLine()) != null) {
+            String formattedLine = line;
+
+            // apply formatting based on options
+            if (toUpperCase) {
+                formattedLine = formattedLine.toUpperCase();
             }
 
-            // format date of birth as dd/mm/yyyy
-            String dob = nameParts[nameParts.length - 2];
-            dob = dob.substring(0, 2) + "/" + dob.substring(2, 4) + "/" + dob.substring(4);
-
-            // format name with or without middle initial, depending on middleInitial value
-            String formattedName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1) + " ";
-            if (!middleInitial.equals("")) {
-                formattedName += middleInitial;
+            if (toHtml) {
+                formattedLine = "<p>" + formattedLine + "</p>";
             }
-            formattedName += lastName.substring(0, 1).toUpperCase() + lastName.substring(1);
 
-            // write formatted name to output file
-            if (uFlag) {
-                writer.write(formattedName.toUpperCase() + " " + dob + "\n");
-            } else if (hFlag) {
-                writer.write("<p>" + formattedName + " " + dob + "</p>\n");
-            } else {
-                writer.write(formattedName + " " + dob + "\n");
-            }
+            writer.write(formattedLine);
+            writer.newLine();
         }
 
-        // create HTML footer if hFlag is true
-        if (hFlag) {
-            writer.write("</body>\n</html>");
-        }
-
-        // close scanner and writer
-        scanner.close();
+        // close the files
+        reader.close();
         writer.close();
+
+        System.out.println("File formatted successfully.");
     }
 }
